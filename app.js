@@ -311,12 +311,24 @@ function onTypeClicked(typeName) {
   renderEffectFrames();
 }
 
+function resetSelection() {
+  state.selectedDefenders = [];
+  renderSlots();
+  updateSelectedUI();
+  renderEffectFrames();
+}
+
 function init() {
   renderSlots();
   renderTypePicker();
   updateSelectedUI();
   buildEffectIcons();
   renderEffectFrames();
+
+  const resetBtn = document.getElementById("resetBtn");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", resetSelection);
+  }
 }
 
 window.addEventListener("DOMContentLoaded", init);

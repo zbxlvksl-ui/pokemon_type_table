@@ -123,6 +123,33 @@ body{
   color: var(--muted);
   line-height: 1.4;
 }
+.picker-actions{
+  margin-top: 10px;
+  display:flex;
+  justify-content:flex-end;
+}
+.reset-btn{
+  appearance:none;
+  border: 1px solid rgba(15, 23, 42, .12);
+  background: #ffffff;
+  color: var(--muted);
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor:pointer;
+  transition: transform .06s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
+}
+.reset-btn:hover{
+  background: rgba(248, 250, 252, .95);
+  border-color: rgba(15, 23, 42, .18);
+  box-shadow: 0 10px 20px rgba(2, 6, 23, .06);
+  transform: translateY(-1px);
+}
+.reset-btn:active{
+  transform: translateY(0px);
+  filter: brightness(.98);
+}
 
 .type-grid{
   display:grid;
