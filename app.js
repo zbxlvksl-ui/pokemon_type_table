@@ -154,6 +154,8 @@ function renderSlots() {
     slot1.textContent = "선택 없음";
     slot1.style.background = "";
     slot1.style.borderColor = "";
+    // 인라인 컬러가 남아 글자가 안 보일 수 있어 초기화
+    slot1.style.color = "";
     slot1.classList.add("slot-placeholder");
   } else {
     const t = state.selectedDefenders[0];
@@ -168,6 +170,8 @@ function renderSlots() {
     slot2.textContent = "선택 없음";
     slot2.style.background = "";
     slot2.style.borderColor = "";
+    // 인라인 컬러가 남아 글자가 안 보일 수 있어 초기화
+    slot2.style.color = "";
     slot2.classList.add("slot-placeholder");
   } else {
     const t = state.selectedDefenders[1];
