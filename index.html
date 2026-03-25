@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>포켓몬 타입 상성 (선택/효과)</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="header">
+        <div>
+          <h1 class="title">포켓몬 타입 상성 확인</h1>
+          <p class="subtitle">상대 포켓몬의 타입(최대 2개)을 선택하면, 각 기술 타입의 효과를 간단히 분류합니다.</p>
+        </div>
+      </header>
+
+      <section class="card">
+        <div class="section-head">
+          <h2>타입 선택 영역</h2>
+        </div>
+
+        <div class="slots" aria-live="polite">
+          <div class="slot">
+            <div class="slot-label">상대 타입 1</div>
+            <div id="slot1" class="slot-value slot-placeholder">선택 없음</div>
+          </div>
+          <div class="slot">
+            <div class="slot-label">상대 타입 2</div>
+            <div id="slot2" class="slot-value slot-placeholder">선택 없음</div>
+          </div>
+        </div>
+
+        <div class="picker">
+          <div class="picker-head">
+            <div class="picker-hint">
+              18개 타입 중 최대 2개까지 선택할 수 있어요. (다른 타입을 선택하면 자동으로 교체됩니다)
+            </div>
+          </div>
+
+          <div id="typePicker" class="type-grid" role="group" aria-label="상대 타입 선택">
+            <!-- JS로 버튼 렌더링 -->
+          </div>
+        </div>
+      </section>
+
+      <section class="card effect-card">
+        <div class="section-head">
+          <h2>선택한 타입에 따른 기술 효과 영역</h2>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+          상대 타입을 1~2개 선택하면 아래에서 결과가 표시됩니다.
+        </div>
+
+        <div id="effectFrames" class="frames" aria-label="기술 효과 분류 프레임">
+          <div class="cat-frame cat-x4">
+            <div class="frame-title">
+              <span class="frame-dot cat-x4"></span>
+              x4배
+            </div>
+            <div id="frame-x4" class="frame-body"></div>
+          </div>
+          <div class="cat-frame cat-x2">
+            <div class="frame-title">
+              <span class="frame-dot cat-x2"></span>
+              x2배
+            </div>
+            <div id="frame-x2" class="frame-body"></div>
+          </div>
+          <div class="cat-frame cat-x1">
+            <div class="frame-title">
+              <span class="frame-dot cat-x1"></span>
+              x1배
+            </div>
+            <div id="frame-x1" class="frame-body"></div>
+          </div>
+          <div class="cat-frame cat-x0p5">
+            <div class="frame-title">
+              <span class="frame-dot cat-x0p5"></span>
+              0.5배
+            </div>
+            <div id="frame-x0p5" class="frame-body"></div>
+          </div>
+          <div class="cat-frame cat-x0p25">
+            <div class="frame-title">
+              <span class="frame-dot cat-x0p25"></span>
+              0.25배
+            </div>
+            <div id="frame-x0p25" class="frame-body"></div>
+          </div>
+          <div class="cat-frame cat-immune">
+            <div class="frame-title">
+              <span class="frame-dot cat-immune"></span>
+              무효
+            </div>
+            <div id="frame-immune" class="frame-body"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
+
