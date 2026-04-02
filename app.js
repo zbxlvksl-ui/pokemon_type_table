@@ -87,10 +87,15 @@ const TYPE_COLORS = {
 };
 
 const state = {
+  mode: "defense", // "defense" | "attack"
   selectedDefenders: [], // up to 2, values are english names in TYPE_ORDER
+  selectedAttacker: null, // one type in TYPE_ORDER
 };
 
-const FRAME_KEYS = ["x4", "x2", "x1", "x0p5", "x0p25", "immune"];
+/** 방어 모드: 상대 방어 타입(최대 2개) 기준으로 기술(공격) 타입 18개 분류 */
+const FRAME_KEYS_DEFENSE = ["x4", "x2", "x1", "x0p5", "x0p25", "immune"];
+/** 공격 모드: 선택한 공격 타입 1개 기준으로 방어 타입 18개 분류(단일 방어 타입 상성: 2/1/0.5/0) */
+const FRAME_KEYS_ATTACK = ["x2", "x1", "x0p5", "immune"];
 const iconEls = new Map(); // typeName -> DOM element
 
 function hexToRgb(hex) {
@@ -146,9 +151,47 @@ function computeCategoryForMove(moveType) {
   return categorizeMultiplier(mult);
 }
 
+/**
+ * 공격 타입 1개 vs 방어 타입 1개: 배율은 2 / 1 / 0.5 / 0 만 가능 (0.25·4는 듀얼타입에서만).
+ */
+function categorizeAttackVsSingleDefender(mult) {
+  if (Math.abs(mult - 0) < 1e-9) return { key: "immune", label: "무효" };
+  if (Math.abs(mult - 2) < 1e-9) return { key: "x2", label: "x2배" };
+  if (Math.abs(mult - 1) < 1e-9) return { key: "x1", label: "x1배" };
+  if (Math.abs(mult - 0.5) < 1e-9) return { key: "x0p5", label: "0.5배" };
+  return { key: "x1", label: "x1배" };
+}
+
+function computeCategoryForDefender(defenderType) {
+  const atk = state.selectedAttacker;
+  if (!atk) return categorizeAttackVsSingleDefender(1);
+  const mult = effectiveness(atk, defenderType);
+  return categorizeAttackVsSingleDefender(mult);
+}
+
 function renderSlots() {
   const slot1 = document.getElementById("slot1");
   const slot2 = document.getElementById("slot2");
+  const slotAtk = document.getElementById("slotAtk");
+
+  if (slotAtk) {
+    if (!state.selectedAttacker) {
+      slotAtk.textContent = "선택 없음";
+      slotAtk.style.background = "";
+      slotAtk.style.borderColor = "";
+      slotAtk.style.color = "";
+      slotAtk.classList.add("slot-placeholder");
+    } else {
+      const t = state.selectedAttacker;
+      slotAtk.textContent = KO_TYPE[t];
+      slotAtk.classList.remove("slot-placeholder");
+      slotAtk.style.background = TYPE_COLORS[t];
+      slotAtk.style.borderColor = "rgba(255,255,255,.55)";
+      slotAtk.style.color = getReadableTextColor(TYPE_COLORS[t]);
+    }
+  }
+
+  if (!slot1 || !slot2) return;
 
   if (!state.selectedDefenders[0]) {
     slot1.textContent = "선택 없음";
@@ -200,30 +243,47 @@ function typeButtonHTML(typeName) {
   `.trim();
 }
 
-function renderTypePicker() {
-  const picker = document.getElementById("typePicker");
+function renderTypePicker(pickerId, onClick) {
+  const picker = document.getElementById(pickerId);
+  if (!picker) return;
   picker.innerHTML = TYPE_ORDER.map(typeButtonHTML).join("");
 
   const buttons = picker.querySelectorAll(".type-btn");
   buttons.forEach((btn) => {
     const typeName = btn.getAttribute("data-type");
-    btn.addEventListener("click", () => onTypeClicked(typeName));
+    btn.addEventListener("click", () => onClick(typeName));
   });
 }
 
 function updateSelectedUI() {
-  const picker = document.getElementById("typePicker");
-  const buttons = picker.querySelectorAll(".type-btn");
-  buttons.forEach((btn) => {
-    const typeName = btn.getAttribute("data-type");
-    const isSelected = state.selectedDefenders.includes(typeName);
-    btn.classList.toggle("selected", isSelected);
-    btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
-  });
+  // defense picker
+  const pickerD = document.getElementById("typePickerDefense");
+  if (pickerD) {
+    const buttons = pickerD.querySelectorAll(".type-btn");
+    buttons.forEach((btn) => {
+      const typeName = btn.getAttribute("data-type");
+      const isSelected = state.selectedDefenders.includes(typeName);
+      btn.classList.toggle("selected", isSelected);
+      btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    });
+  }
+
+  // attack picker
+  const pickerA = document.getElementById("typePickerAttack");
+  if (pickerA) {
+    const buttons = pickerA.querySelectorAll(".type-btn");
+    buttons.forEach((btn) => {
+      const typeName = btn.getAttribute("data-type");
+      const isSelected = state.selectedAttacker === typeName;
+      btn.classList.toggle("selected", isSelected);
+      btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    });
+  }
 }
 
 function buildEffectIcons() {
   const frameX1 = document.getElementById("frame-x1");
+  if (!frameX1) return;
   frameX1.innerHTML = "";
   iconEls.clear();
 
@@ -245,17 +305,66 @@ function buildEffectIcons() {
   }
 }
 
-function getFrameBody(catKey) {
+function getDefenseFrame(catKey) {
   return document.getElementById(`frame-${catKey}`);
+}
+
+function getAttackFrame(catKey) {
+  return document.getElementById(`frame-atk-${catKey}`);
+}
+
+function clearAllEffectFrames() {
+  for (const k of FRAME_KEYS_DEFENSE) {
+    const el = getDefenseFrame(k);
+    if (el) el.innerHTML = "";
+  }
+  for (const k of FRAME_KEYS_ATTACK) {
+    const el = getAttackFrame(k);
+    if (el) el.innerHTML = "";
+  }
 }
 
 function renderEffectFrames() {
   const emptyState = document.getElementById("emptyState");
-  const effectFrames = document.getElementById("effectFrames");
+  const defenseFramesEl = document.getElementById("effectFramesDefense");
+  const attackFramesEl = document.getElementById("effectFramesAttack");
+  const hintEl = document.getElementById("effectModeHint");
 
-  const isEmpty = state.selectedDefenders.length === 0;
-  emptyState.style.display = isEmpty ? "block" : "none";
-  effectFrames.classList.toggle("is-empty", isEmpty);
+  const isDefense = state.mode === "defense";
+  const isEmpty = isDefense
+    ? state.selectedDefenders.length === 0
+    : !state.selectedAttacker;
+
+  if (emptyState) {
+    emptyState.style.display = isEmpty ? "block" : "none";
+    if (isDefense) {
+      emptyState.textContent =
+        "상대 타입을 1~2개 선택하면 아래에서 결과가 표시됩니다.";
+    } else {
+      emptyState.textContent =
+        "공격 타입을 1개 선택하면 아래에서 결과가 표시됩니다.";
+    }
+  }
+
+  if (defenseFramesEl) {
+    defenseFramesEl.hidden = !isDefense;
+    defenseFramesEl.classList.toggle("is-empty", isEmpty && isDefense);
+  }
+  if (attackFramesEl) {
+    attackFramesEl.hidden = isDefense;
+    attackFramesEl.classList.toggle("is-empty", isEmpty && !isDefense);
+  }
+
+  if (hintEl) {
+    if (isEmpty || isDefense) {
+      hintEl.hidden = true;
+      hintEl.textContent = "";
+    } else {
+      hintEl.hidden = false;
+      hintEl.textContent =
+        "공격 모드: 상대가 단일 방어 타입일 때는 x2·x1·0.5·무효로 나뉩니다. x4·0.25배는 방어 타입 선택(최대 2개) 모드에서 확인하세요.";
+    }
+  }
 
   // FLIP: old positions
   const oldRects = {};
@@ -263,14 +372,20 @@ function renderEffectFrames() {
     oldRects[typeName] = el.getBoundingClientRect();
   });
 
-  // Move icons into their category frames
-  for (const k of FRAME_KEYS) {
-    getFrameBody(k).innerHTML = "";
-  }
+  clearAllEffectFrames();
 
-  for (const moveType of TYPE_ORDER) {
-    const cat = computeCategoryForMove(moveType);
-    getFrameBody(cat.key).appendChild(iconEls.get(moveType));
+  if (isDefense) {
+    for (const moveType of TYPE_ORDER) {
+      const cat = computeCategoryForMove(moveType);
+      const frame = getDefenseFrame(cat.key);
+      if (frame) frame.appendChild(iconEls.get(moveType));
+    }
+  } else {
+    for (const defType of TYPE_ORDER) {
+      const cat = computeCategoryForDefender(defType);
+      const frame = getAttackFrame(cat.key);
+      if (frame) frame.appendChild(iconEls.get(defType));
+    }
   }
 
   // FLIP: animate deltas
@@ -295,7 +410,7 @@ function renderEffectFrames() {
   });
 }
 
-function onTypeClicked(typeName) {
+function onDefenseTypeClicked(typeName) {
   const existsIndex = state.selectedDefenders.indexOf(typeName);
   if (existsIndex !== -1) {
     // 토글: 이미 선택된 타입을 다시 누르면 제거
@@ -315,8 +430,61 @@ function onTypeClicked(typeName) {
   renderEffectFrames();
 }
 
-function resetSelection() {
+function onAttackTypeClicked(typeName) {
+  if (state.selectedAttacker === typeName) {
+    state.selectedAttacker = null;
+  } else {
+    state.selectedAttacker = typeName;
+  }
+  renderSlots();
+  updateSelectedUI();
+  renderEffectFrames();
+}
+
+function resetDefenseSelection() {
   state.selectedDefenders = [];
+  renderSlots();
+  updateSelectedUI();
+  renderEffectFrames();
+}
+
+function resetAttackSelection() {
+  state.selectedAttacker = null;
+  renderSlots();
+  updateSelectedUI();
+  renderEffectFrames();
+}
+
+function setMode(mode) {
+  state.mode = mode;
+
+  const pickerTitle = document.getElementById("pickerTitle");
+  const effectSectionTitle = document.getElementById("effectSectionTitle");
+  const tabDefense = document.getElementById("tabDefense");
+  const tabAttack = document.getElementById("tabAttack");
+  const defensePanel = document.getElementById("defensePanel");
+  const attackPanel = document.getElementById("attackPanel");
+
+  const isDefense = mode === "defense";
+  if (pickerTitle) pickerTitle.textContent = isDefense ? "방어 타입 선택 영역" : "공격 타입 선택 영역";
+  if (effectSectionTitle) {
+    effectSectionTitle.textContent = isDefense
+      ? "타입 별 방어 상성"
+      : "타입 별 공격 상성";
+  }
+
+  if (tabDefense) {
+    tabDefense.classList.toggle("is-active", isDefense);
+    tabDefense.setAttribute("aria-selected", isDefense ? "true" : "false");
+  }
+  if (tabAttack) {
+    tabAttack.classList.toggle("is-active", !isDefense);
+    tabAttack.setAttribute("aria-selected", !isDefense ? "true" : "false");
+  }
+
+  if (defensePanel) defensePanel.classList.toggle("is-active", isDefense);
+  if (attackPanel) attackPanel.classList.toggle("is-active", !isDefense);
+
   renderSlots();
   updateSelectedUI();
   renderEffectFrames();
@@ -324,15 +492,27 @@ function resetSelection() {
 
 function init() {
   renderSlots();
-  renderTypePicker();
+  renderTypePicker("typePickerDefense", onDefenseTypeClicked);
+  renderTypePicker("typePickerAttack", onAttackTypeClicked);
   updateSelectedUI();
   buildEffectIcons();
   renderEffectFrames();
 
-  const resetBtn = document.getElementById("resetBtn");
-  if (resetBtn) {
-    resetBtn.addEventListener("click", resetSelection);
+  const resetBtnDefense = document.getElementById("resetBtnDefense");
+  if (resetBtnDefense) {
+    resetBtnDefense.addEventListener("click", resetDefenseSelection);
   }
+  const resetBtnAttack = document.getElementById("resetBtnAttack");
+  if (resetBtnAttack) {
+    resetBtnAttack.addEventListener("click", resetAttackSelection);
+  }
+
+  const tabDefense = document.getElementById("tabDefense");
+  const tabAttack = document.getElementById("tabAttack");
+  if (tabDefense) tabDefense.addEventListener("click", () => setMode("defense"));
+  if (tabAttack) tabAttack.addEventListener("click", () => setMode("attack"));
+
+  setMode("defense");
 }
 
 window.addEventListener("DOMContentLoaded", init);

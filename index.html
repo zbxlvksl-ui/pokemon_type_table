@@ -11,16 +11,28 @@
       <header class="header">
         <div>
           <h1 class="title">포켓몬 타입 상성 확인</h1>
-          <p class="subtitle">상대 포켓몬의 타입(최대 2개)을 선택하면, 각 기술 타입의 효과를 간단히 분류합니다.</p>
+          <p class="subtitle">
+            방어 모드: 상대 포켓몬 타입(최대 2개) 기준으로 기술 타입 18개를 x4~무효로 분류합니다. 공격 모드: 공격 타입 1개를 고르면, 상대가 가질 수 있는 방어 타입 18개를 단일 타입 상성(x2·x1·0.5·무효)으로 분류합니다.
+          </p>
         </div>
       </header>
 
+      <nav class="tabs" aria-label="모드 선택 탭">
+        <button id="tabDefense" class="tab-btn is-active" type="button" aria-selected="true">
+          방어 타입 선택 영역
+        </button>
+        <button id="tabAttack" class="tab-btn" type="button" aria-selected="false">
+          공격 타입 선택 영역
+        </button>
+      </nav>
+
       <section class="card">
         <div class="section-head">
-          <h2>타입 선택 영역</h2>
+          <h2 id="pickerTitle">방어 타입 선택 영역</h2>
         </div>
 
-        <div class="slots" aria-live="polite">
+        <div id="defensePanel" class="panel is-active" aria-live="polite">
+          <div class="slots">
           <div class="slot">
             <div class="slot-label">상대 타입 1</div>
             <div id="slot1" class="slot-value slot-placeholder">선택 없음</div>
@@ -29,36 +41,70 @@
             <div class="slot-label">상대 타입 2</div>
             <div id="slot2" class="slot-value slot-placeholder">선택 없음</div>
           </div>
+          </div>
+
+          <div class="picker">
+            <div class="picker-head">
+              <div class="picker-hint">
+                18개 타입 중 최대 2개까지 선택할 수 있어요. (다른 타입을 선택하면 자동으로 교체됩니다)
+              </div>
+              <div class="picker-actions">
+                <button id="resetBtnDefense" class="reset-btn" type="button">
+                  선택 초기화
+                </button>
+              </div>
+            </div>
+
+            <div id="typePickerDefense" class="type-grid" role="group" aria-label="방어 타입 선택">
+              <!-- JS로 버튼 렌더링 -->
+            </div>
+          </div>
         </div>
 
-        <div class="picker">
-          <div class="picker-head">
-            <div class="picker-hint">
-              18개 타입 중 최대 2개까지 선택할 수 있어요. (다른 타입을 선택하면 자동으로 교체됩니다)
-            </div>
-            <div class="picker-actions">
-              <button id="resetBtn" class="reset-btn" type="button">
-                선택 초기화
-              </button>
+        <div id="attackPanel" class="panel" aria-live="polite">
+          <div class="slots slots-one">
+            <div class="slot">
+              <div class="slot-label">공격 타입</div>
+              <div id="slotAtk" class="slot-value slot-placeholder">선택 없음</div>
             </div>
           </div>
 
-          <div id="typePicker" class="type-grid" role="group" aria-label="상대 타입 선택">
-            <!-- JS로 버튼 렌더링 -->
+          <div class="picker">
+            <div class="picker-head">
+              <div class="picker-hint">
+                18개 타입 중 1가지만 선택할 수 있어요. (다른 타입을 선택하면 교체됩니다)
+              </div>
+              <div class="picker-actions">
+                <button id="resetBtnAttack" class="reset-btn" type="button">
+                  선택 초기화
+                </button>
+              </div>
+            </div>
+
+            <div id="typePickerAttack" class="type-grid" role="group" aria-label="공격 타입 선택">
+              <!-- JS로 버튼 렌더링 -->
+            </div>
           </div>
         </div>
       </section>
 
       <section class="card effect-card">
         <div class="section-head">
-          <h2>선택한 타입에 따른 기술 효과 영역</h2>
+          <h2 id="effectSectionTitle">타입 별 방어 상성</h2>
         </div>
 
         <div id="emptyState" class="empty-state">
           상대 타입을 1~2개 선택하면 아래에서 결과가 표시됩니다.
         </div>
 
-        <div id="effectFrames" class="frames" aria-label="기술 효과 분류 프레임">
+        <p id="effectModeHint" class="effect-mode-hint" hidden></p>
+
+        <!-- 방어 모드: 선택한 상대 방어 타입(최대 2개)에 대해 기술(공격) 타입 18개를 6분류 -->
+        <div
+          id="effectFramesDefense"
+          class="frames frames-defense"
+          aria-label="방어 기준 기술 효과 분류"
+        >
           <div class="cat-frame cat-x4">
             <div class="frame-title">
               <span class="frame-dot cat-x4"></span>
@@ -100,6 +146,44 @@
               무효
             </div>
             <div id="frame-immune" class="frame-body"></div>
+          </div>
+        </div>
+
+        <!-- 공격 모드: 선택한 공격 타입 1개에 대해 상대가 가질 수 있는 방어 타입 18개를 4분류(단일 방어 타입 기준) -->
+        <div
+          id="effectFramesAttack"
+          class="frames frames-attack"
+          aria-label="공격 기준 방어 타입 효과 분류"
+          hidden
+        >
+          <div class="cat-frame cat-x2">
+            <div class="frame-title">
+              <span class="frame-dot cat-x2"></span>
+              x2배
+            </div>
+            <div id="frame-atk-x2" class="frame-body"></div>
+          </div>
+          <div class="cat-frame cat-x1">
+            <div class="frame-title">
+              <span class="frame-dot cat-x1"></span>
+              x1배
+            </div>
+            <div id="frame-atk-x1" class="frame-body"></div>
+          </div>
+          <div class="cat-frame cat-x0p5">
+            <div class="frame-title">
+              <span class="frame-dot cat-x0p5"></span>
+              0.5배
+            </div>
+            <div class="frame-subtitle">0.25배는 방어 타입 선택(2개) 모드에서 확인</div>
+            <div id="frame-atk-x0p5" class="frame-body"></div>
+          </div>
+          <div class="cat-frame cat-immune">
+            <div class="frame-title">
+              <span class="frame-dot cat-immune"></span>
+              무효
+            </div>
+            <div id="frame-atk-immune" class="frame-body"></div>
           </div>
         </div>
       </section>
