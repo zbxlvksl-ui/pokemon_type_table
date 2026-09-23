@@ -1,195 +1,43 @@
 <!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>포켓몬 타입 상성 (선택/효과)</title>
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body>
-    <div class="page">
-      <header class="header">
-        <div>
-          <h1 class="title">포켓몬 타입 상성 확인</h1>
-          <p class="subtitle">
-            방어 모드: 상대 포켓몬 타입(최대 2개) 기준으로 기술 타입 18개를 x4~무효로 분류합니다. 공격 모드: 공격 타입 1개를 고르면, 상대가 가질 수 있는 방어 타입 18개를 단일 타입 상성(x2·x1·0.5·무효)으로 분류합니다.
-          </p>
-        </div>
-      </header>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>우리의 자산 노트</title>
+<style>
+:root{--ink:#152c32;--muted:#64767b;--line:#dce6e8;--green:#007e72;--light:#e7f4f1;--bg:#f3f7f8;--red:#b64c46}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Malgun Gothic",system-ui,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:10px;background:white;padding:10px 16px;color:var(--ink)}button:hover{border-color:var(--green)}button.primary{background:var(--green);border-color:var(--green);color:white}button:disabled{opacity:.5;cursor:default}input,select,textarea{border:1px solid #bdcdd1;border-radius:8px;padding:10px;background:white;color:var(--ink);width:100%}input:focus,button:focus-visible,textarea:focus{outline:3px solid #77cfc4;outline-offset:2px}label{display:block;font-size:14px;color:var(--muted)}label input,label select{margin-top:6px}h1,h2,h3,p{margin:0}h1{font-size:30px;letter-spacing:-1px}h2{font-size:20px;margin-bottom:18px}h3{font-size:16px;margin-bottom:12px}.shell{max-width:1460px;margin:auto;display:grid;grid-template-columns:230px 1fr;min-height:100vh}aside{border-right:1px solid var(--line);padding:36px 24px;background:white;position:sticky;top:0;height:100vh}.brand{font-size:22px;font-weight:800;letter-spacing:-1px}.brand b{color:var(--green)}.eyebrow{font-size:12px;letter-spacing:2px;color:var(--green);font-weight:700}.side-note{font-size:13px;color:var(--muted);margin-top:28px}nav{display:grid;gap:9px;margin-top:42px}nav button{text-align:left;border:0;padding:13px 15px;background:transparent}nav button.active{background:var(--light);color:var(--green);font-weight:bold}main{min-width:0;padding:32px 42px 60px}header{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:30px}header input{width:170px}.sub{color:var(--muted);font-size:14px;margin-top:6px}.card{background:white;border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:20px}.hero{background:#123e42;color:white;border:0;padding:32px;position:relative}.hero .sub{color:#bdd5d5}.hero .big{font-size:42px;letter-spacing:-1px;font-weight:700;margin:14px 0}.hero .row{justify-content:space-between}.badge{display:inline-block;padding:4px 10px;border-radius:7px;background:var(--light);font-size:13px;color:var(--green)}.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}.stat{background:white;border:1px solid var(--line);border-radius:14px;padding:20px}.stat strong{display:block;font-size:24px;margin-top:8px}.muted{color:var(--muted)}.small{font-size:14px}.amount{font-variant-numeric:tabular-nums;white-space:nowrap}.negative{color:var(--red)}.fields{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.fields .wide{grid-column:1/-1}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;border-bottom:1px solid var(--line);padding:13px 10px;white-space:nowrap}th{font-size:13px;color:var(--muted);font-weight:normal}td input{min-width:105px;max-width:160px}progress{width:100%;height:12px;accent-color:var(--green);margin:15px 0}.check{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:12px 0;gap:12px}.check:last-child{border:0}.chart{width:100%;height:190px;display:block}.chart-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.empty{padding:24px 0;color:var(--muted)}.notice{background:#edf4f6;border-radius:10px;padding:14px;font-size:14px;color:#47626a;margin:16px 0}.list-item{display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}.list-item .grow{flex:1}.icon{width:40px;height:40px;display:grid;place-items:center;background:var(--light);border-radius:12px;color:var(--green);font-weight:bold}footer{font-size:12px;color:var(--muted);margin-top:26px}#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#143b40;color:white;padding:12px 24px;border-radius:12px;z-index:10;max-width:90vw}#toast:empty{display:none}.range{accent-color:var(--green)}@media(max-width:1000px){main{padding:28px 24px}.shell{grid-template-columns:185px 1fr}aside{padding:30px 16px}.stats{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}@media(max-width:650px){.shell{display:block}aside{position:static;height:auto;padding:18px;border:0}.side-note{display:none}nav{display:flex;overflow:auto;margin-top:16px;gap:2px}nav button{padding:10px;white-space:nowrap;font-size:14px}main{padding:20px 16px}header{align-items:flex-start;gap:12px}h1{font-size:24px}header input{width:145px;padding:8px}.hero .big{font-size:32px}.card{padding:20px}.fields{grid-template-columns:1fr}.stats{gap:10px}.stat{padding:15px}.stat strong{font-size:23px}.hero{padding:24px}.grid{gap:0}}@media print{aside,header input,button,.actions,footer{display:none!important}.shell{display:block}main{padding:0}.card,.stat{break-inside:avoid}.hero{background:white;color:black;border:1px solid #ddd}.hero .sub{color:#555}}
+</style></head><body><div class="shell"><aside><div class="eyebrow">TOGETHER, MONTH BY MONTH</div><div class="brand">우리의 <b>자산 노트</b></div><nav aria-label="주 메뉴"></nav><div class="side-note">한 달에 한 번,<br>우리의 숫자를 함께 봐요.<br><br><span class="badge">이 브라우저에 저장</span></div></aside><main><header><div><div class="eyebrow" id="section-label">OUR MONEY</div><h1 id="title"></h1><p class="sub" id="subtitle"></p></div><label>기준 월<input id="month" type="month" min="1900-01" max="9999-12"></label></header><div id="content"></div><footer>원본: 부부_자산관리_템플릿.xlsx · 기능 참고: 결영이네 모아불리 시작가이드<br>독립 제작한 로컬 HTML입니다. 모아불리 서비스와 연결되지 않습니다.</footer></main></div><div id="toast" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+const KEY='couple-asset-note-v1', cats=['현금','예금/적금','투자자산','부동산','부채'], groups=['수입','저축·투자','고정지출','변동지출'];
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const initial=()=>({version:1,names:['남편','아내'],goal:1000000000,homePrice:600000000,rate:30,assets:Array.from({length:6},(_,i)=>({month:`2025-0${i+1}`,values:[0,0,0,0,0],confirmed:false})),budgets:{},entries:[]});
+let state=initial(), tab='home', month=today().slice(0,7),storageIssue=false;
 
-      <nav class="tabs" aria-label="모드 선택 탭">
-        <button id="tabDefense" class="tab-btn is-active" type="button" aria-selected="true">
-          방어 타입 선택 영역
-        </button>
-        <button id="tabAttack" class="tab-btn" type="button" aria-selected="false">
-          공격 타입 선택 영역
-        </button>
-      </nav>
-
-      <section class="card">
-        <div class="section-head">
-          <h2 id="pickerTitle">방어 타입 선택 영역</h2>
-        </div>
-
-        <div id="defensePanel" class="panel is-active" aria-live="polite">
-          <div class="slots">
-          <div class="slot">
-            <div class="slot-label">상대 타입 1</div>
-            <div id="slot1" class="slot-value slot-placeholder">선택 없음</div>
-          </div>
-          <div class="slot">
-            <div class="slot-label">상대 타입 2</div>
-            <div id="slot2" class="slot-value slot-placeholder">선택 없음</div>
-          </div>
-          </div>
-
-          <div class="picker">
-            <div class="picker-head">
-              <div class="picker-hint">
-                18개 타입 중 최대 2개까지 선택할 수 있어요. (다른 타입을 선택하면 자동으로 교체됩니다)
-              </div>
-              <div class="picker-actions">
-                <button id="resetBtnDefense" class="reset-btn" type="button">
-                  선택 초기화
-                </button>
-              </div>
-            </div>
-
-            <div id="typePickerDefense" class="type-grid" role="group" aria-label="방어 타입 선택">
-              <!-- JS로 버튼 렌더링 -->
-            </div>
-          </div>
-        </div>
-
-        <div id="attackPanel" class="panel" aria-live="polite">
-          <div class="slots slots-one">
-            <div class="slot">
-              <div class="slot-label">공격 타입</div>
-              <div id="slotAtk" class="slot-value slot-placeholder">선택 없음</div>
-            </div>
-          </div>
-
-          <div class="picker">
-            <div class="picker-head">
-              <div class="picker-hint">
-                18개 타입 중 1가지만 선택할 수 있어요. (다른 타입을 선택하면 교체됩니다)
-              </div>
-              <div class="picker-actions">
-                <button id="resetBtnAttack" class="reset-btn" type="button">
-                  선택 초기화
-                </button>
-              </div>
-            </div>
-
-            <div id="typePickerAttack" class="type-grid" role="group" aria-label="공격 타입 선택">
-              <!-- JS로 버튼 렌더링 -->
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="card effect-card">
-        <div class="section-head">
-          <h2 id="effectSectionTitle">타입 별 방어 상성</h2>
-        </div>
-
-        <div id="emptyState" class="empty-state">
-          상대 타입을 1~2개 선택하면 아래에서 결과가 표시됩니다.
-        </div>
-
-        <p id="effectModeHint" class="effect-mode-hint" hidden></p>
-
-        <!-- 방어 모드: 선택한 상대 방어 타입(최대 2개)에 대해 기술(공격) 타입 18개를 6분류 -->
-        <div
-          id="effectFramesDefense"
-          class="frames frames-defense"
-          aria-label="방어 기준 기술 효과 분류"
-        >
-          <div class="cat-frame cat-x4">
-            <div class="frame-title">
-              <span class="frame-dot cat-x4"></span>
-              x4배
-            </div>
-            <div id="frame-x4" class="frame-body"></div>
-          </div>
-          <div class="cat-frame cat-x2">
-            <div class="frame-title">
-              <span class="frame-dot cat-x2"></span>
-              x2배
-            </div>
-            <div id="frame-x2" class="frame-body"></div>
-          </div>
-          <div class="cat-frame cat-x1">
-            <div class="frame-title">
-              <span class="frame-dot cat-x1"></span>
-              x1배
-            </div>
-            <div id="frame-x1" class="frame-body"></div>
-          </div>
-          <div class="cat-frame cat-x0p5">
-            <div class="frame-title">
-              <span class="frame-dot cat-x0p5"></span>
-              0.5배
-            </div>
-            <div id="frame-x0p5" class="frame-body"></div>
-          </div>
-          <div class="cat-frame cat-x0p25">
-            <div class="frame-title">
-              <span class="frame-dot cat-x0p25"></span>
-              0.25배
-            </div>
-            <div id="frame-x0p25" class="frame-body"></div>
-          </div>
-          <div class="cat-frame cat-immune">
-            <div class="frame-title">
-              <span class="frame-dot cat-immune"></span>
-              무효
-            </div>
-            <div id="frame-immune" class="frame-body"></div>
-          </div>
-        </div>
-
-        <!-- 공격 모드: 선택한 공격 타입 1개에 대해 상대가 가질 수 있는 방어 타입 18개를 4분류(단일 방어 타입 기준) -->
-        <div
-          id="effectFramesAttack"
-          class="frames frames-attack"
-          aria-label="공격 기준 방어 타입 효과 분류"
-          hidden
-        >
-          <div class="cat-frame cat-x2">
-            <div class="frame-title">
-              <span class="frame-dot cat-x2"></span>
-              x2배
-            </div>
-            <div id="frame-atk-x2" class="frame-body"></div>
-          </div>
-          <div class="cat-frame cat-x1">
-            <div class="frame-title">
-              <span class="frame-dot cat-x1"></span>
-              x1배
-            </div>
-            <div id="frame-atk-x1" class="frame-body"></div>
-          </div>
-          <div class="cat-frame cat-x0p5">
-            <div class="frame-title">
-              <span class="frame-dot cat-x0p5"></span>
-              0.5배
-            </div>
-            <div class="frame-subtitle">0.25배는 방어 타입 선택(2개) 모드에서 확인</div>
-            <div id="frame-atk-x0p5" class="frame-body"></div>
-          </div>
-          <div class="cat-frame cat-immune">
-            <div class="frame-title">
-              <span class="frame-dot cat-immune"></span>
-              무효
-            </div>
-            <div id="frame-atk-immune" class="frame-body"></div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <script src="./app.js"></script>
-  </body>
-</html>
-
+const $=s=>document.querySelector(s), esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),won=n=>Math.round(n).toLocaleString('ko-KR')+'원', sum=a=>a.reduce((s,n)=>s+n,0), net=a=>sum(a.values.slice(0,4))-a.values[4];
+const money=(n)=>Number.isSafeInteger(n)&&n>=0&&n<=1e14;
+try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);validate(parsed);state=parsed}}catch(e){storageIssue=true}
+function validate(s){const assert=(b)=>{if(!b)throw Error('백업 파일의 데이터 형식이 올바르지 않습니다.')};assert(s&&s.version===1&&Array.isArray(s.names)&&s.names.length===2&&s.names.every(n=>typeof n==='string'&&n.length>0&&n.length<=20));assert(money(s.goal)&&s.goal>0&&money(s.homePrice)&&s.homePrice>0&&Number.isFinite(s.rate)&&s.rate>=0&&s.rate<=100);assert(Array.isArray(s.assets)&&Array.isArray(s.entries)&&s.budgets&&typeof s.budgets==='object'&&!Array.isArray(s.budgets));const mon=m=>typeof m==='string'&&/^(19|[2-9]\d)\d{2}-(0[1-9]|1[0-2])$/.test(m);assert(s.assets.every(a=>mon(a.month)&&Array.isArray(a.values)&&a.values.length===5&&a.values.every(money)&&typeof a.confirmed==='boolean'));assert(new Set(s.assets.map(a=>a.month)).size===s.assets.length);assert(Object.entries(s.budgets).every(([m,b])=>mon(m)&&b&&Array.isArray(b.people)&&b.people.length===2&&Array.isArray(b.done)&&b.done.length===2&&b.done.every(x=>typeof x==='boolean')&&typeof b.saved==='boolean'&&b.people.every(p=>p&&['plan','actual'].every(k=>Array.isArray(p[k])&&p[k].length===4&&p[k].every(money)))));assert(s.entries.every(e=>typeof e.id==='string'&&typeof e.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(e.date)&&!isNaN(Date.parse(e.date))&&[0,1].includes(e.person)&&typeof e.text==='string'&&e.text.length<=200&&money(e.amount)&&['고정지출','변동지출'].includes(e.category)));assert(new Set(s.entries.map(e=>e.id)).size===s.entries.length)}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));storageIssue=false;return true}catch(e){storageIssue=true;alert('브라우저에 저장하지 못했습니다. 설정에서 JSON 백업을 내려받아 기록을 보관해 주세요.');return false}}
+function toast(t){$('#toast').textContent=t;setTimeout(()=>$('#toast').textContent='',3500)}
+function budget(){return state.budgets[month]||{people:[0,1].map(()=>({plan:[0,0,0,0],actual:[0,0,0,0]})),saved:false,done:[false,false]}}
+function record(){return state.assets.find(a=>a.month===month)}
+function entries(){return state.entries.filter(e=>e.date.startsWith(month))}
+function totals(which){const b=budget();return groups.map((_,i)=>sum(b.people.map(p=>p[which][i])))}
+const screens={home:['우리집 한눈에','숫자가 모이면, 다음 계획이 보여요.'],assets:['월별 자산','월말 잔액을 적고 순자산의 흐름을 확인하세요.'],budget:['예산과 정산','월초에 계획하고, 월말에 함께 확인해요.'],diary:['오늘의 고백','작은 지출도, 안 쓴 하루도 기록으로 남겨요.'],house:['내집마련','저축률을 바꾸며 우리의 목표를 그려보세요.'],settings:['설정과 백업','이름과 목표를 정하고 기록을 안전하게 보관하세요.']};
+function go(t){tab=t;render()}
+function chart(records){if(!records.length)return '<div class="empty">자산을 기록하면 월별 흐름이 나타나요.</div>';const vals=records.map(net),lo=Math.min(0,...vals),hi=Math.max(1,...vals),x=i=>20+i*660/Math.max(1,vals.length-1),y=v=>160-(v-lo)/(hi-lo||1)*130;return `<svg class="chart" viewBox="0 0 700 190" role="img" aria-label="월별 순자산 추이"><line x1="20" x2="680" y1="${y(0)}" y2="${y(0)}" stroke="#dce6e8"/><polyline fill="none" stroke="#008577" stroke-width="3" points="${vals.map((v,i)=>`${x(i)},${y(v)}`).join(' ')}"/>${vals.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="#008577"><title>${records[i].month}: ${won(v)}</title></circle>`).join('')}</svg><div class="chart-labels"><span>${records[0].month}</span><span>${records.at(-1).month}</span></div>`}
+function render(){document.querySelector('nav').innerHTML=Object.entries(screens).map(([k,v])=>`<button data-go="${k}" class="${tab===k?'active':''}" ${tab===k?'aria-current="page"':''}>${{home:'◉',assets:'▤',budget:'▦',diary:'✎',house:'⌂',settings:'⚙'}[k]} &nbsp;${v[0]}</button>`).join('');$('#month').value=month;$('#title').textContent=screens[tab][0];$('#subtitle').textContent=screens[tab][1];$('#content').innerHTML=(storageIssue?'<div class="notice">기존 저장 기록을 읽지 못했거나 저장이 제한되어 있습니다. 이전 백업이 있다면 설정에서 복원하세요.</div>':'')+({home:homeView,assets:assetsView,budget:budgetView,diary:diaryView,house:houseView,settings:settingsView}[tab])();}
+function homeView(){const a=record(),b=budget(),p=totals('plan'),es=entries(),spend=sum(es.map(e=>e.amount)),n=a?net(a):0,checks=[!!a?.confirmed,b.saved,es.length>0],count=checks.filter(Boolean).length,history=state.assets.filter(a=>a.month<=month).sort((a,b)=>a.month.localeCompare(b.month)),prev=history.filter(a=>a.month<month).at(-1);return `<section class="hero card"><div class="row"><span>${month} 우리집 순자산</span><span class="badge">${a?'월별 자산 기준':'아직 미입력'}</span></div><div class="big">${a?won(n):'첫 자산을 기록해요'}</div><div class="sub">${a&&prev?`이전 기록(${prev.month}) 대비 ${won(n-net(prev))}`:'현금 + 예금/적금 + 투자자산 + 부동산 − 부채'}</div><div class="actions"><button data-go="assets">자산 입력하기 →</button></div></section><div class="stats"><div class="stat"><span class="muted small">이번 달 수입 예산</span><strong>${won(p[0])}</strong></div><div class="stat"><span class="muted small">이번 달 지출 기록</span><strong>${won(spend)}</strong></div><div class="stat"><span class="muted small">저축·투자 계획</span><strong>${won(p[1])}</strong></div></div>${count<3?`<section class="card"><div class="row" style="justify-content:space-between"><h2>우리집 시작 가이드</h2><span class="badge">${count} / 3</span></div>${['우리집 자산 등록하기','이번 달 예산 세우기','오늘 쓴 돈 고백하기'].map((s,i)=>`<div class="check"><span>${checks[i]?'✓':'○'} ${s}</span><button data-go="${['assets','budget','diary'][i]}">${checks[i]?'확인':'시작'} →</button></div>`).join('')}</section>`:''}<div class="grid"><section class="card"><h2>순자산의 흐름</h2>${chart(history)}<p class="sub">${history.length}개월 기록 · 원본의 0원 데이터 포함</p></section><section class="card"><h2>함께 확인하는 이번 달</h2><p class="notice">${b.done.every(Boolean)?'이번 달 정산이 완료되었어요.':!b.saved?'월초에는 수입과 지출 예산을 세워주세요.':'월말에는 실제 금액을 적고 두 사람 모두 확인해 주세요.'}</p>${state.names.map((n,i)=>`<div class="check"><span>${esc(n)}</span><span class="badge">${b.done[i]?'정산 완료':'정산 대기'}</span></div>`).join('')}<div class="actions"><button data-go="budget">예산·정산 열기</button></div></section></div><section class="card"><h2>10년 순자산 목표</h2><div class="row"><strong>${won(n)}</strong><span class="muted">/ ${won(state.goal)}</span></div><progress max="100" value="${Math.max(0,Math.min(100,n/state.goal*100))}"></progress><p class="sub">현재 달성률 ${Math.max(0,n/state.goal*100).toFixed(1)}% · 목표는 설정에서 변경할 수 있어요.</p></section>`}
+function assetsView(){const a=record();return `<section class="card"><h2>${month} 자산 입력</h2><form id="assets-form"><div class="fields">${cats.map((c,i)=>`<label>${c} (원)<input name="v${i}" type="number" min="0" max="100000000000000" step="1" required value="${a?.values[i]??0}"></label>`).join('')}</div><p class="notice">각 금액은 이번 달 말 기준 잔액입니다. 부채는 양수로 입력하면 순자산에서 차감됩니다.</p><button class="primary">이 달의 자산 저장</button></form></section><section class="card"><h2>월별 자산 기록</h2><p class="sub">엑셀의 2025년 1~6월 기록과 계산식을 반영했습니다. 상단에서 다른 월을 선택하면 새 기록을 추가할 수 있어요.</p><div class="table-wrap"><table><thead><tr><th>월</th>${cats.map(c=>`<th>${c}</th>`).join('')}<th>순자산</th></tr></thead><tbody>${[...state.assets].sort((a,b)=>a.month.localeCompare(b.month)).map(a=>`<tr><td><button data-month="${a.month}">${a.month}</button></td>${a.values.map(v=>`<td class="amount">${won(v)}</td>`).join('')}<td class="amount"><strong>${won(net(a))}</strong></td></tr>`).join('')}</tbody></table></div></section>`}
+function budgetView(){const b=budget(),p=totals('plan'),v=totals('actual');return `<section class="card"><div class="row" style="justify-content:space-between"><h2>${month} 월간 계획</h2><button id="copy-budget">지난달 예산 가져오기</button></div><p class="sub">두 사람의 금액을 각각 입력하세요. 저축·투자는 소비 지출과 구분됩니다.</p><form id="budget-form">${state.names.map((n,i)=>`<h3 style="margin-top:24px">${esc(n)} <span class="badge">${b.done[i]?'정산 완료':'정산 대기'}</span></h3><div class="table-wrap"><table><thead><tr><th>항목</th><th>예산 (원)</th><th>실제 (원)</th><th>실제 − 예산</th></tr></thead><tbody>${groups.map((g,j)=>`<tr><td>${g}</td>${['plan','actual'].map(k=>`<td><input aria-label="${esc(n)} ${g} ${k==='plan'?'예산':'실제'}" name="${i}-${k}-${j}" type="number" min="0" max="100000000000000" step="1" required value="${b.people[i][k][j]}"></td>`).join('')}<td class="amount">${won(b.people[i].actual[j]-b.people[i].plan[j])}</td></tr>`).join('')}</tbody></table></div>`).join('')}<p class="notice">저장하면 차이와 합계가 갱신됩니다. 금액이 바뀌면 두 사람의 정산 확인은 해제됩니다. 고백 기록은 자동 합산하지 않으며, 아래 버튼으로 지출 실제값에 반영할 수 있어요.</p><div class="actions"><button class="primary">예산·실제 금액 저장</button><button type="button" id="use-diary">고백 기록을 지출 실제값에 반영</button></div></form></section><div class="stats"><div class="stat"><span class="muted small">예산의 남는 돈</span><strong>${won(p[0]-sum(p.slice(1)))}</strong></div><div class="stat"><span class="muted small">실제 남는 돈</span><strong>${won(v[0]-sum(v.slice(1)))}</strong></div><div class="stat"><span class="muted small">실제 소비 지출</span><strong>${won(v[2]+v[3])}</strong></div></div><section class="card"><h2>우리 둘의 확인</h2><p class="sub">이 기기에서 각자의 이름으로 확인합니다. 두 사람 모두 확인하면 월 정산 완료로 표시됩니다.</p>${state.names.map((n,i)=>`<div class="check"><span>${esc(n)} · ${b.done[i]?'완료':'대기'}</span><button data-confirm="${i}" ${!b.saved?'disabled':''}>${b.done[i]?'확인 취소':'저장한 정산 확인'}</button></div>`).join('')}</section>`}
+function diaryView(){const es=entries().sort((a,b)=>b.date.localeCompare(a.date));return `<section class="card"><h2>오늘, 어디에 썼나요?</h2><form id="diary-form"><div class="fields"><label>기록 날짜<input name="date" type="date" required value="${month===today().slice(0,7)?today():month+'-01'}"></label><label>기록한 사람<select name="person">${state.names.map((n,i)=>`<option value="${i}">${esc(n)}</option>`).join('')}</select></label><label>지출 구분<select name="category"><option>변동지출</option><option>고정지출</option></select></label><label class="wide">내용과 금액<textarea name="text" rows="3" maxlength="500" placeholder="점심 9천원, 커피 5,500원"></textarea></label></div><p class="sub">쉼표 또는 줄바꿈으로 구분하세요. 지원 예: 점심 9000원 / 커피 5,500원 / 장보기 3만5천원. 저장 전 금액을 확인합니다.</p><div class="actions"><button class="primary">금액 확인하고 기록</button><button type="button" id="zero-day">오늘은 안 썼어요</button></div></form></section><section class="card"><div class="row" style="justify-content:space-between"><h2>${month}의 기록</h2><strong>${won(sum(es.map(e=>e.amount)))}</strong></div><p class="sub">${new Set(es.map(e=>e.date)).size}일 기록 · ${es.length}건</p>${es.length?es.map(e=>`<div class="list-item"><div class="icon">${e.amount?'₩':'✓'}</div><div class="grow"><strong>${esc(e.text)}</strong><div class="sub">${e.date} · ${esc(state.names[e.person])} · ${e.category}</div></div><strong class="amount">${won(e.amount)}</strong><button data-delete="${esc(e.id)}" aria-label="${esc(e.text)} 삭제">삭제</button></div>`).join(''):'<div class="empty">아직 기록이 없어요. 오늘부터 한 줄씩 남겨보세요.</div>'}</section>`}
+function forecast(start,monthly,years=10){return start+monthly*12*years}
+function houseView(){const a=record(),n=a?net(a):0,p=totals('plan'),monthly=p[0]*state.rate/100,future=forecast(n,monthly),gap=Math.max(0,state.homePrice-n),months=monthly>0?Math.ceil(gap/monthly):null;return `<section class="hero card"><span>내집마련 목표 금액</span><div class="big">${won(state.homePrice)}</div><p class="sub">${a?`현재 순자산 ${won(n)}`:'먼저 선택한 월의 자산을 입력해 주세요.'}</p><progress max="100" value="${Math.max(0,Math.min(100,n/state.homePrice*100))}"></progress></section><section class="card"><h2>우리의 저축 속도</h2><label>월 수입 중 저축 비율 <strong id="rate-label">${state.rate}%</strong><input id="saving-rate" class="range" type="range" min="0" max="100" step="1" value="${state.rate}"></label><div id="projection"><div class="stats"><div class="stat"><span class="muted small">월 저축 가정</span><strong>${won(monthly)}</strong></div><div class="stat"><span class="muted small">10년 뒤 예상 순자산</span><strong>${won(future)}</strong></div><div class="stat"><span class="muted small">목표까지 예상 기간</span><strong>${gap===0?'목표 달성':months===null?'계산 대기':`${Math.floor(months/12)}년 ${months%12}개월`}</strong></div></div></div><p class="notice">선택한 월의 수입 예산 ${won(p[0])}과 순자산을 기준으로 단순 누적합니다. 투자수익률 0%, 집값 고정, 세금·대출·물가 미반영입니다. 순자산 전체를 매입 자금으로 보는 가정이며 실제 구매 가능 금액이나 대출 가능 여부를 진단하지 않습니다.</p><div class="actions"><button data-go="budget">수입 예산 입력</button><button data-go="settings">목표 금액 변경</button></div></section>`}
+function settingsView(){return `<section class="card"><h2>우리집 설정</h2><form id="settings-form"><div class="fields">${state.names.map((n,i)=>`<label>${i+1}번째 사람 호칭<input name="name${i}" required maxlength="20" value="${esc(n)}"></label>`).join('')}<label>10년 순자산 목표 (원)<input name="goal" type="number" min="1" max="100000000000000" step="1" required value="${state.goal}"></label><label>내집마련 목표 금액 (원)<input name="homePrice" type="number" min="1" max="100000000000000" step="1" required value="${state.homePrice}"></label></div><div class="actions"><button class="primary">설정 저장</button></div></form></section><section class="card"><h2>기록 백업과 복원</h2><p>기록은 현재 브라우저에 저장됩니다. 다른 기기로 옮길 때는 JSON 파일을 내보낸 뒤 가져오세요.</p><p class="notice">브라우저 데이터 삭제, 시크릿 모드 종료, 파일 위치 또는 브라우저 변경 시 기록이 사라지거나 다른 저장 공간이 열릴 수 있습니다. 주기적으로 백업해 주세요. 로그인, 초대 코드, 서버 저장, 기기 간 실시간 동기화는 이 HTML에 포함되지 않습니다.</p><div class="actions"><button id="export" class="primary">JSON 내보내기</button><button id="import">JSON 가져오기</button><button id="print">현재 화면 인쇄 / PDF 저장</button></div><input id="backup-file" type="file" accept=".json,application/json" hidden></section><section class="card"><h2>사용 순서</h2><ol><li>상단에서 기록할 월을 선택하고 자산 잔액을 저장하세요.</li><li>가계부에 두 사람의 수입·저축·고정·변동 예산을 입력하세요.</li><li>고백에 지출이나 무지출 기록을 남기세요.</li><li>월말에 실제 금액을 저장하고 두 사람의 확인을 완료하세요.</li></ol><p class="sub">엑셀의 6개월 데이터는 모두 0원인 템플릿입니다. 예시 자산을 실제 값처럼 추가하지 않았습니다.</p></section>`}
+// ponytail: 제한된 금액 문법만 파싱한다. 자유로운 한국어 해석은 별도 언어 모델 연결이 필요하다.
+function parseDiary(text){const pieces=text.trim().split(/,\s*(?!\d{3}(?:\D|$))|\n/).map(s=>s.trim()).filter(Boolean);if(!pieces.length)throw Error('내용과 금액을 입력해 주세요.');return pieces.map(part=>{const m=part.match(/^(.+?)\s+((?:\d[\d,]*)(?:만(?:\d+천)?|천)?)(?:원)?$/);if(!m)throw Error('각 항목을 “점심 9000원”처럼 적어주세요.');const raw=m[2].replaceAll(',','');let amount;if(raw.includes('만')){const [a,b]=raw.split('만');amount=Number(a)*10000+(b?Number(b.replace('천',''))*1000:0)}else amount=Number(raw.replace('천',''))*(raw.includes('천')?1000:1);if(!money(amount)||m[1].length>200)throw Error('금액이나 내용의 길이를 확인해 주세요.');return {text:m[1],amount}})}
+document.addEventListener('click',e=>{const el=e.target.closest('button');if(!el)return;if(el.dataset.go){go(el.dataset.go);return}if(el.dataset.month){month=el.dataset.month;render();return}if(el.dataset.confirm!==undefined){const b=budget();b.done[Number(el.dataset.confirm)]=!b.done[Number(el.dataset.confirm)];state.budgets[month]=b;persist();render();return}if(el.dataset.delete){if(confirm('이 지출 기록을 삭제할까요? 이미 반영한 월말 정산 금액은 변경되지 않습니다.')){state.entries=state.entries.filter(x=>x.id!==el.dataset.delete);persist();render()}return}if(el.id==='copy-budget'){const d=new Date(month+'-01T12:00:00');d.setMonth(d.getMonth()-1);const prev=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`,old=state.budgets[prev];if(!old?.saved){toast('지난달에 저장한 예산이 없어요.');return}if(!confirm('입력 중인 예산을 지난달 예산으로 바꿀까요? 저장 버튼을 눌러야 반영됩니다.'))return;old.people.forEach((p,i)=>p.plan.forEach((v,j)=>document.querySelector(`[name="${i}-plan-${j}"]`).value=v));toast('지난달 예산을 채웠어요. 확인 후 저장하세요.')}if(el.id==='use-diary'){if(!confirm('입력 중인 고정·변동 실제 지출을 이 달의 고백 기록 합계로 바꿀까요? 기록이 없는 항목은 0원이 됩니다.'))return;[0,1].forEach(i=>[2,3].forEach(j=>document.querySelector(`[name="${i}-actual-${j}"]`).value=sum(entries().filter(e=>e.person===i&&e.category===groups[j]).map(e=>e.amount))));toast('지출을 채웠어요. 확인 후 저장하세요.')}if(el.id==='zero-day'){const f=$('#diary-form');if(!f.reportValidity())return;const date=f.elements.date.value,person=Number(f.elements.person.value);if(state.entries.some(e=>e.date===date&&e.person===person)){toast('이 사람의 해당 날짜에 이미 기록이 있어요.');return}addEntries([{text:'무지출 하루',amount:0}],f)}if(el.id==='export'){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`우리의_자산노트_${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}if(el.id==='import')$('#backup-file').click();if(el.id==='print')window.print()});
+$('#month').addEventListener('change',e=>{if(e.target.validity.valid&&e.target.value){month=e.target.value;render()}});
+function addEntries(items,f){const date=f.elements.date.value,person=Number(f.elements.person.value),category=f.elements.category.value;state.entries=state.entries.filter(e=>!(e.date===date&&e.person===person&&e.text==='무지출 하루'&&e.amount===0));state.entries.push(...items.map((item,i)=>({...item,date,person,category,id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)+'-'+i})));month=date.slice(0,7);const ok=persist();render();if(ok)toast('기록했어요. 오늘도 우리의 돈을 함께 알아가요.');}
+document.addEventListener('submit',e=>{e.preventDefault();const f=e.target,data=new FormData(f);try{if(f.id==='assets-form'){const values=cats.map((_,i)=>Number(data.get('v'+i)));if(!values.every(money))throw Error('금액을 확인해 주세요.');const a={month,values,confirmed:true},index=state.assets.findIndex(a=>a.month===month);if(index<0)state.assets.push(a);else state.assets[index]=a}if(f.id==='budget-form'){const b=budget(),people=[0,1].map(i=>Object.fromEntries(['plan','actual'].map(k=>[k,groups.map((_,j)=>Number(data.get(`${i}-${k}-${j}`)))])));if(!people.every(p=>[...p.plan,...p.actual].every(money)))throw Error('금액을 확인해 주세요.');if(JSON.stringify(people)!==JSON.stringify(b.people))b.done=[false,false];b.people=people;b.saved=true;state.budgets[month]=b}if(f.id==='settings-form'){const names=[data.get('name0').trim(),data.get('name1').trim()];if(names.some(n=>!n))throw Error('호칭을 입력해 주세요.');state.names=names;state.goal=Number(data.get('goal'));state.homePrice=Number(data.get('homePrice'))}if(f.id==='diary-form'){const items=parseDiary(data.get('text'));if(confirm(items.map(i=>`${i.text}: ${won(i.amount)}`).join('\n')+`\n\n총 ${won(sum(items.map(i=>i.amount)))}을 기록할까요?`))addEntries(items,f);return}const ok=persist();render();if(ok)toast('저장했어요.')}catch(err){alert(err.message)}});
+document.addEventListener('input',e=>{if(e.target.id==='saving-rate'){const focus=e.target;state.rate=Number(focus.value);$('#rate-label').textContent=state.rate+'%';const wrapper=document.createElement('div');wrapper.innerHTML=houseView();$('#projection').innerHTML=wrapper.querySelector('#projection').innerHTML}});
+document.addEventListener('change',async e=>{if(e.target.id==='saving-rate')persist();if(e.target.id!=='backup-file'||!e.target.files[0])return;try{if(e.target.files[0].size>5*1024*1024)throw Error('5MB 이하의 백업 파일을 선택해 주세요.');const next=JSON.parse(await e.target.files[0].text());validate(next);if(!confirm('현재 기록 전체를 백업 파일의 내용으로 교체할까요? 먼저 현재 기록을 내보내는 것을 권장합니다.'))return;state=next;const ok=persist();render();if(ok)toast('백업을 복원했어요.')}catch(err){alert('복원하지 못했습니다. '+err.message)}});
+render();
+</script></body></html>
